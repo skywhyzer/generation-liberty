@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generation Liberty | Support</title>
+    <style>
+        /* --- CORE VARIABLES & RESET --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: #0a0a0a;
+            --main-green: #39ff14; /* Neon Terminal Green */
+            --dim-green: #1b5e20;
+            --text-color: #e0e0e0;
+            --border-color: #333;
+            --font-stack: 'Courier New', Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* --- CRT OVERLAY EFFECT (Subtle) --- */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            color: var(--main-green);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            min-height: 1.8rem;
+        }
+
+        /* Blinking Cursor */
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.8rem;
+            background-color: var(--main-green);
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .description {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            border-left: 2px solid var(--dim-green);
+            padding-left: 15px;
+        }
+
+        /* --- GRID LAYOUT --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px 20px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--main-green);
+            box-shadow: 0 0 8px rgba(57, 255, 20, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: var(--main-green);
+            font-weight: bold;
+        }
+
+        .coin-tag {
+            border: 1px solid var(--dim-green);
+            padding: 2px 6px;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        /* --- INPUT & COPY --- */
+        .address-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            color: #888;
+            padding: 8px 10px;
+            font-family: var(--font-stack);
+            font-size: 0.85rem;
+            outline: none;
+        }
+        
+        input:focus {
+            color: #fff;
+            border-color: #555;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--main-green);
+            color: var(--main-green);
+            padding: 0 15px;
+            cursor: pointer;
+            font-family: var(--font-stack);
+            font-weight: bold;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            background: var(--main-green);
+            color: #000;
+        }
+
+        .copy-btn:active {
+            transform: translateY(2px);
+        }
+
+        /* --- BANK & ALERTS --- */
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .donation-alerts-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: var(--dim-green);
+            color: #fff;
+            text-decoration: none;
+            padding: 15px;
+            border: 1px solid var(--main-green);
+            margin-top: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .donation-alerts-btn:hover {
+            background: var(--main-green);
+            color: #000;
+            box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555;
+            border-top: 1px solid #111;
+            padding-top: 20px;
+            width: 100%;
+        }
+
+        /* --- UTILS --- */
+        .tooltip {
+            position: absolute;
+            background: var(--main-green);
+            color: black;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            border-radius: 2px;
+            top: -10px;
+            right: 0;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        .tooltip.show { opacity: 1; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.4rem; min-height: 3rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="typewriter"></h1><span class="cursor"></span>
+        
+        <div class="description">
+            <p>> Проект без рекламы. Мы помогаем людям получать доступ к свободному интернету.</p>
+            <p>> Если вам это полезно — вы можете поддержать проект любым удобным способом.</p>
+        </div>
+
+        <div class="grid">
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="coin-tag">BTC</span> Bitcoin
+                </div>
+                <div class="address-row">
+                    <input type="text" value="BTC_ADDRESS_PLACEHOLDER_HERE" readonly id="btc-addr">
+                    <button class="copy-btn" onclick="copyToClipboard('btc-addr', this)">COPY</button>
+                    <span class="tooltip">Copied!</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="coin-tag">ETH</span> Ethereum
+                </div>
+                <div class="address-row">
+                    <input type="text" value="ETH_ADDRESS_PLACEHOLDER_HERE" readonly id="eth-addr">
+                    <button class="copy-btn" onclick="copyToClipboard('eth-addr', this)">COPY</button>
+                    <span class="tooltip">Copied!</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="coin-tag">TRC20</span> USDT (Tron)
+                </div>
+                <div class="address-row">
+                    <input type="text" value="TRC20_ADDRESS_PLACEHOLDER_HERE" readonly id="trc-addr">
+                    <button class="copy-btn" onclick="copyToClipboard('trc-addr', this)">COPY</button>
+                    <span class="tooltip">Copied!</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="coin-tag">ERC20</span> USDT (Eth)
+                </div>
+                <div class="address-row">
+                    <input type="text" value="ERC20_ADDRESS_PLACEHOLDER_HERE" readonly id="erc-addr">
+                    <button class="copy-btn" onclick="copyToClipboard('erc-addr', this)">COPY</button>
+                    <span class="tooltip">Copied!</span>
+                </div>
+            </div>
+
+            <div class="card full-width">
+                <div class="card-header">
+                    <span class="coin-tag">XMR</span> Monero (Private)
+                </div>
+                <div class="address-row">
+                    <input type="text" value="XMR_ADDRESS_PLACEHOLDER_HERE" readonly id="xmr-addr">
+                    <button class="copy-btn" onclick="copyToClipboard('xmr-addr', this)">COPY</button>
+                    <span class="tooltip">Copied!</span>
+                </div>
+            </div>
+
+            <div class="card full-width" style="border-color: #444;">
+                <div class="card-header" style="color: #fff;">
+                    <span class="coin-tag" style="border-color: #fff;">FIAT</span> Банковская карта (РФ / International)
+                </div>
+                <div class="address-row">
+                    <input type="text" value="CARD_NUMBER_PLACEHOLDER" readonly id="bank-addr" style="color: #fff; border-color: #555;">
+                    <button class="copy-btn" onclick="copyToClipboard('bank-addr', this)" style="border-color: #fff; color: #fff;">COPY</button>
+                    <span class="tooltip">Copied!</span>
+                </div>
+            </div>
+
+        </div> 
+
+        <a href="#" class="donation-alerts-btn">
+            [ Поддержать через Donation Alerts ]
+        </a>
+
+        <footer>
+            Generation Liberty • No ads • Community-supported<br>
+            <span style="opacity: 0.5;">System Status: Online</span>
+        </footer>
+    </div>
+
+    <script>
+        // --- TYPEWRITER EFFECT ---
+        const textToType = "Поддержать Generation Liberty";
+        const typeWriterElement = document.getElementById('typewriter');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < textToType.length) {
+                typeWriterElement.textContent += textToType.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50); // Adjust typing speed here
+            } else {
+                // Remove cursor after typing (optional, currently kept for effect)
+                // document.querySelector('.cursor').style.display = 'none';
+            }
+        }
+
+        // Start typing after small delay
+        window.onload = function() {
+            setTimeout(typeWriter, 300);
+        };
+
+        // --- COPY TO CLIPBOARD ---
+        function copyToClipboard(elementId, btnElement) {
+            const copyText = document.getElementById(elementId);
+            
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                
+                // Visual Feedback
+                const originalText = btnElement.innerText;
+                const card = btnElement.closest('.card, .address-row');
+                const tooltip = card.querySelector('.tooltip');
+                
+                // Show tooltip
+                tooltip.classList.add('show');
+                btnElement.innerText = "OK";
+                btnElement.style.background = "var(--main-green)";
+                btnElement.style.color = "black";
+
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                    btnElement.innerText = originalText;
+                    btnElement.style.background = "transparent";
+                    btnElement.style.color = btnElement.closest('.card').querySelector('.copy-btn').style.borderColor || "var(--main-green)";
+                    if(elementId === 'bank-addr') btnElement.style.color = "#fff"; // Specific fix for bank button
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
